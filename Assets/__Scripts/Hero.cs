@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 
@@ -18,12 +19,17 @@ public class Hero : MonoBehaviour
     [Tooltip("This field holds a reference to the last triggering GameObject")]
     private GameObject lastTriggerGo = null;
 
+    public delegate void WeaponFireDelegate();
+
+    public event WeaponFireDelegate fireEvent;
+
     void Awake() {
         if (S == null) {
             S = this;
         } else {
             Debug.LogError("Hero.Awake() - Attempted to assign second Hero.S!");
         }
+        fireEvent += TempFire;
     }
 
     void Update() {
@@ -37,8 +43,12 @@ public class Hero : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(vAxis*pitchMult,hAxis*rollMult,0);
 
-        if(Input.GetKeyDown(KeyCode.Space)){
-            TempFire();
+        // if(Input.GetKeyDown(KeyCode.Space)){
+        //     TempFire();
+        // }
+
+        if (Input.GetAxis("Jump") == 1 && fireEvent != null){
+            fireEvent();
         }
     }
 
@@ -46,7 +56,11 @@ public class Hero : MonoBehaviour
         GameObject projGO = Instantiate<GameObject>(projectilePrefab);
         projGO.transform.position = transform.position;
         Rigidbody rigidb = projGO.GetComponent<Rigidbody>();
-        rigidb.linearVelocity = Vector3.up * projectileSpeed;
+        // rigidb.linearVelocity = Vector3.up * projectileSpeed;
+
+        ProjectileHero proj = projGO.GetComponent<ProjectileHero>();
+        float tSpeed = Main.GET_WEAPON_DEFINITION(proj.type).velocity;
+        rigidb.linearVelocity = Vector3.up * tSpeed;
     }
 
     void OnTriggerEnter(Collider other)
