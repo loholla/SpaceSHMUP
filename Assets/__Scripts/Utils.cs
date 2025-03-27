@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Utils : MonoBehaviour
 {
+    // Bezier Curves
     static public Vector3 Bezier(float u, params Vector3[] points){
         Vector3[,] vArr = new Vector3[points.Length, points.Length];
 
@@ -17,5 +18,17 @@ public class Utils : MonoBehaviour
         }
 
         return vArr[0,0];
+    }
+
+    // Materials Functions
+    static public Material[] GetAllMaterials(GameObject go){
+        Renderer[] rends = go.GetComponentsInChildren<Renderer>();
+
+        Material[] mats = new Material[rends.Length];
+        for (int i = 0; i < rends.Length; i++){
+            mats[i] = rends[i].material;
+        }
+
+        return mats;
     }
 }
