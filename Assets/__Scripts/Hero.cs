@@ -28,6 +28,9 @@ public class Hero : MonoBehaviour
         } else {
             Debug.LogError("Hero.Awake() - Attempted to assign second Hero.S!");
         }
+
+        ClearWeapons();
+        weapons[0].SetType(eWeaponType.blaster);
         // fireEvent += TempFire;
     }
 
