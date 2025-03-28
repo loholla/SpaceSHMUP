@@ -11,8 +11,8 @@ public enum eWeaponType {
     none,
     blaster,
     spread,
-    phaser, //[NI]
-    missile, //[NI]
+    phaser,
+    cannon,
     laser, //[NI]
     shieldLevel
 }
@@ -119,6 +119,14 @@ public class Weapon : MonoBehaviour
                 p = MakeProjectile();
                 p.transform.rotation = Quaternion.AngleAxis(-10, Vector3.back);
                 p.vel = p.transform.rotation * vel;
+                break;
+            case eWeaponType.phaser: // A stronger, slower version of the blaster
+                p = MakeProjectile();
+                p.vel = vel;
+                break;
+            case eWeaponType.cannon:
+                p = MakeProjectile();
+                p.vel = vel;
                 break;
         }
     }
